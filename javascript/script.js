@@ -1445,89 +1445,160 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // --- 10. TERMINAL THEME TOGGLING EASTER EGG ---
   function setupThemeToggling() {
-    const blueDot = document.querySelector('.terminal-dot.blue');
-    const blackDot = document.querySelector('.terminal-dot.black');
-    const rainbowDot = document.querySelector('.terminal-dot.rainbow');
+    const dots = document.querySelectorAll('.terminal-dot');
+    if (!dots.length) return;
 
-    if (!blueDot || !blackDot || !rainbowDot) return;
+    let rainbowIndex = 0;
+    const rainbowThemes = ['matrix', 'amber', 'synthwave', 'cyan', 'crimson', 'mint', 'sunset', 'yellow'];
 
-    const hslToRgbString = (h, s, l) => {
-      s /= 100;
-      l /= 100;
-      const k = n => (n + h / 30) % 12;
-      const a = s * Math.min(l, 1 - l);
-      const f = n => l - a * Math.max(-1, Math.min(k(n) - 3, 9 - k(n), 1));
-      return `${Math.round(255 * f(0))}, ${Math.round(255 * f(8))}, ${Math.round(255 * f(4))}`;
+    const presets = {
+      matrix: {
+        '--color-dark-bg': '#050B05',
+        '--color-dark-bg-rgb': '5, 11, 5',
+        '--color-light-text': '#00FF66',
+        '--color-accent': '#00FF66',
+        '--color-accent-rgb': '0, 255, 102',
+        '--color-accent-subtle': '#009933',
+        '--color-dark-accent': '#0F200F',
+        '--color-light-bg': '#00FF66',
+        '--color-dark-text': '#050B05'
+      },
+      amber: {
+        '--color-dark-bg': '#0F0A00',
+        '--color-dark-bg-rgb': '15, 10, 0',
+        '--color-light-text': '#FFB000',
+        '--color-accent': '#FFB000',
+        '--color-accent-rgb': '255, 176, 0',
+        '--color-accent-subtle': '#B37B00',
+        '--color-dark-accent': '#261C02',
+        '--color-light-bg': '#FFB000',
+        '--color-dark-text': '#0F0A00'
+      },
+      synthwave: {
+        '--color-dark-bg': '#1A0B2E',
+        '--color-dark-bg-rgb': '26, 11, 46',
+        '--color-light-text': '#F3E8FF',
+        '--color-accent': '#BD93F9',
+        '--color-accent-rgb': '189, 147, 249',
+        '--color-accent-subtle': '#8B5CF6',
+        '--color-dark-accent': '#3B0764',
+        '--color-light-bg': '#F3E8FF',
+        '--color-dark-text': '#1A0B2E'
+      },
+      cyan: {
+        '--color-dark-bg': '#0B1E2D',
+        '--color-dark-bg-rgb': '11, 30, 45',
+        '--color-light-text': '#E0F2FE',
+        '--color-accent': '#00F0FF',
+        '--color-accent-rgb': '0, 240, 255',
+        '--color-accent-subtle': '#0284C7',
+        '--color-dark-accent': '#0F3A5F',
+        '--color-light-bg': '#E0F2FE',
+        '--color-dark-text': '#0B1E2D'
+      },
+      crimson: {
+        '--color-dark-bg': '#1A0505',
+        '--color-dark-bg-rgb': '26, 5, 5',
+        '--color-light-text': '#FFEAEF',
+        '--color-accent': '#FF2D55',
+        '--color-accent-rgb': '255, 45, 85',
+        '--color-accent-subtle': '#F43F5E',
+        '--color-dark-accent': '#450A0A',
+        '--color-light-bg': '#FFEAEF',
+        '--color-dark-text': '#1A0505'
+      },
+      mint: {
+        '--color-dark-bg': '#022C22',
+        '--color-dark-bg-rgb': '2, 44, 34',
+        '--color-light-text': '#ECFDF5',
+        '--color-accent': '#34D399',
+        '--color-accent-rgb': '52, 211, 153',
+        '--color-accent-subtle': '#059669',
+        '--color-dark-accent': '#064E3B',
+        '--color-light-bg': '#ECFDF5',
+        '--color-dark-text': '#022C22'
+      },
+      sunset: {
+        '--color-dark-bg': '#1C0F0A',
+        '--color-dark-bg-rgb': '28, 15, 10',
+        '--color-light-text': '#FFF7ED',
+        '--color-accent': '#FF5E00',
+        '--color-accent-rgb': '255, 94, 0',
+        '--color-accent-subtle': '#EA580C',
+        '--color-dark-accent': '#451A03',
+        '--color-light-bg': '#FFF7ED',
+        '--color-dark-text': '#1C0F0A'
+      },
+      yellow: {
+        '--color-dark-bg': '#171405',
+        '--color-dark-bg-rgb': '23, 20, 5',
+        '--color-light-text': '#FEFCE8',
+        '--color-accent': '#FFE600',
+        '--color-accent-rgb': '255, 230, 0',
+        '--color-accent-subtle': '#CA8A04',
+        '--color-dark-accent': '#423805',
+        '--color-light-bg': '#FEFCE8',
+        '--color-dark-text': '#171405'
+      }
     };
 
-    const resetTheme = () => {
+    const themes = {
+      default: () => {
+        const root = document.documentElement;
+        root.style.removeProperty('--color-dark-bg');
+        root.style.removeProperty('--color-dark-bg-rgb');
+        root.style.removeProperty('--color-light-text');
+        root.style.removeProperty('--color-accent');
+        root.style.removeProperty('--color-accent-rgb');
+        root.style.removeProperty('--color-accent-subtle');
+        root.style.removeProperty('--color-dark-accent');
+        root.style.removeProperty('--color-light-bg');
+        root.style.removeProperty('--color-dark-text');
+        
+        document.body.classList.remove('light-mode');
+        document.body.classList.remove('mono-chrome-mode');
+      },
+      mono: () => {
+        setThemeProperties({
+          '--color-dark-bg': '#000000',
+          '--color-dark-bg-rgb': '0, 0, 0',
+          '--color-light-text': '#ffffff',
+          '--color-accent': '#ffffff',
+          '--color-accent-rgb': '255, 255, 255',
+          '--color-accent-subtle': '#dddddd',
+          '--color-dark-accent': '#262626',
+          '--color-light-bg': '#ffffff',
+          '--color-dark-text': '#000000'
+        });
+        document.body.classList.remove('light-mode');
+        document.body.classList.add('mono-chrome-mode');
+      },
+      rainbow: () => {
+        const selectedTheme = rainbowThemes[rainbowIndex];
+        setThemeProperties(presets[selectedTheme]);
+        document.body.classList.remove('light-mode');
+        document.body.classList.add('mono-chrome-mode');
+        
+        // Cycle to next colorful theme
+        rainbowIndex = (rainbowIndex + 1) % rainbowThemes.length;
+      }
+    };
+
+    function setThemeProperties(props) {
       const root = document.documentElement;
-      root.style.removeProperty('--color-dark-bg');
-      root.style.removeProperty('--color-dark-bg-rgb');
-      root.style.removeProperty('--color-light-text');
-      root.style.removeProperty('--color-accent');
-      root.style.removeProperty('--color-accent-rgb');
-      root.style.removeProperty('--color-accent-subtle');
-      root.style.removeProperty('--color-dark-accent');
-      root.style.removeProperty('--color-light-bg');
-      root.style.removeProperty('--color-dark-text');
-      
-      document.body.classList.remove('light-mode');
-      document.body.classList.remove('mono-chrome-mode');
-    };
+      for (const [key, value] of Object.entries(props)) {
+        root.style.setProperty(key, value);
+      }
+    }
 
-    const setBlackAndWhiteTheme = () => {
-      const root = document.documentElement;
-      root.style.setProperty('--color-dark-bg', '#000000');
-      root.style.setProperty('--color-dark-bg-rgb', '0, 0, 0');
-      root.style.setProperty('--color-light-text', '#ffffff');
-      root.style.setProperty('--color-accent', '#ffffff');
-      root.style.setProperty('--color-accent-rgb', '255, 255, 255');
-      root.style.setProperty('--color-accent-subtle', '#dddddd');
-      root.style.setProperty('--color-dark-accent', '#333333');
-      root.style.setProperty('--color-light-bg', '#ffffff');
-      root.style.setProperty('--color-dark-text', '#000000');
-
-      document.body.classList.remove('light-mode');
-      document.body.classList.add('mono-chrome-mode');
-    };
-
-    const setRandomMonochromeTheme = () => {
-      const hue1 = Math.floor(Math.random() * 360); // Base color (dark background)
-      const hue2 = (hue1 + 135) % 360; // Vibrant contrasting accent color!
-      const hue3 = (hue1 + 225) % 360; // Secondary accent color!
-
-      const root = document.documentElement;
-      const bgRgb = hslToRgbString(hue1, 35, 8);
-      const accentRgb = hslToRgbString(hue2, 95, 65);
-
-      root.style.setProperty('--color-dark-bg', `hsl(${hue1}, 35%, 8%)`);
-      root.style.setProperty('--color-dark-bg-rgb', bgRgb);
-      root.style.setProperty('--color-light-text', `hsl(${hue3}, 85%, 85%)`);
-      root.style.setProperty('--color-accent', `hsl(${hue2}, 95%, 65%)`);
-      root.style.setProperty('--color-accent-rgb', accentRgb);
-      root.style.setProperty('--color-accent-subtle', `hsl(${hue3}, 80%, 55%)`);
-      root.style.setProperty('--color-dark-accent', `hsl(${hue1}, 30%, 20%)`);
-      root.style.setProperty('--color-light-bg', `hsl(${hue2}, 25%, 95%)`);
-      root.style.setProperty('--color-dark-text', `hsl(${hue1}, 40%, 15%)`);
-
-      document.body.classList.remove('light-mode');
-      document.body.classList.add('mono-chrome-mode');
-    };
-
-    blueDot.addEventListener('click', (e) => {
-      e.stopPropagation();
-      resetTheme();
-    });
-
-    blackDot.addEventListener('click', (e) => {
-      e.stopPropagation();
-      setBlackAndWhiteTheme();
-    });
-
-    rainbowDot.addEventListener('click', (e) => {
-      e.stopPropagation();
-      setRandomMonochromeTheme();
+    dots.forEach(dot => {
+      dot.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const themeName = dot.getAttribute('data-theme');
+        if (themes[themeName]) {
+          themes[themeName]();
+        }
+      });
     });
   }
 });
