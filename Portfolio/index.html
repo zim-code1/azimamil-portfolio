@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#050B05">
+  <meta name="description" content="Azim Amil - Web Developer, Graphics Designer and Pixel Artist. Interactive portfolio.">
+  <title>Azim Amil | Control Deck</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Share+Tech+Mono&family=VT323&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="sprites/logo.png">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+    
+<body>
+  <!-- High-Performance Zero-Allocation Interactive Canvas -->
+  <canvas id="pixelDust"></canvas>
+
+  <!-- Global Intro Screen -->
+  <div id="intro">
+    <canvas id="node-network-canvas"></canvas>
+    <div class="boot-terminal">
+      <div class="boot-header">
+        <span class="boot-dot red"></span>
+        <span class="boot-dot yellow"></span>
+        <span class="boot-dot green"></span>
+        <span class="boot-title">system_boot.sh — azim-os v2026.09</span>
+      </div>
+      <div class="boot-body" id="boot-log"></div>
+      <div class="boot-action hidden" id="boot-action">
+        <button class="boot-btn" type="button">INITIATE SYSTEM SESSION</button>
+        <span class="boot-bypass-hint">(or click background to skip)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- THEMED DESKTOP HOME SCREEN (Cleaned, no redundant folders) -->
+  <div id="pc-desktop" class="pc-desktop">
+    <div class="desktop-crt-scanlines"></div>
+
+    <!-- Top OS Status Bar: Live Clock & Deck Switcher -->
+    <div class="pc-top-panel">
+      <div class="pc-panel-center">
+        <span>[DATE]: </span>
+        <span id="pc-clock">Initializing...</span>
+      </div>
+    </div>
+
+    <!-- Center Hero Presentation (Matching Reference Image 2: "I'm Azim" + Role Scrambler) -->
+    <main class="desktop-hero-stage">
+      <button type="button" class="desktop-hero-card" id="desktop-hero-trigger" aria-label="Open Control Deck">
+        <h1 class="desktop-hero-title">I'm Azim</h1>
+        <div class="desktop-hero-pill">
+          <span class="desktop-hero-role" id="hero-roles">Software Engineer</span>
+        </div>
+        <span class="desktop-hero-prompt">[ Click the header or have fun with Pixelated Background :> ]</span>
+      </button>
+    </main>
+
+    <!-- Inside <div id="pc-desktop" class="pc-desktop">, add: -->
+    <div class="desktop-icons-dock">
+      <button type="button" class="desktop-folder-icon" id="open-desktop-projects">
+        <span class="folder-icon">📁</span>
+        <span class="folder-label">projects/</span>
+      </button>
+      <button type="button" class="desktop-folder-icon" id="open-desktop-gallery">
+        <span class="folder-icon">⭐</span>
+        <span class="folder-label">badges.rom</span>
+      </button>
+    </div>
+
+    <!-- Add Journal Forum Modal at the bottom with other modals -->
+    <div id="journal-forum-modal" class="deck-modal-overlay hidden">
+      <div class="deck-modal-window journal-window">
+        <div class="explorer-header-bar">
+          <span class="explorer-title">azim_forum_and_journal.log</span>
+          <div class="explorer-controls">
+            <span class="control-dot red" id="close-journal-modal"></span>
+          </div>
+        </div>
+        <div class="journal-window-body">
+          <h3 class="journal-window-title">// SYSTEM FORUM &amp; ACTIVITY FEED</h3>
+          <div id="full-journal-container" class="journal-feed"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Master Terminal Control Deck Mesh -->
+  <div id="deck-container">
+    
+    <!-- Top Deck Header -->
+    <header class="deck-top-bar">
+      <div class="deck-title-group">
+        <span class="deck-status-dot"></span>
+        <span class="deck-title">https://zim-code1.github.io/azimamil-portfolio/viewer</span>
+      </div>
+      <div class="window-action-controls deck-master-controls">
+        <button type="button" class="control-btn red" data-action="deck-close" aria-label="Close deck" title="Close Deck to Wallpaper">
+          <span class="btn-icon">&times;</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- 6-Panel Grid Matrix -->
+    <div class="deck-grid" id="deck-grid">
+      
+      <!-- 1. TOP-LEFT: Profile Card -->
+      <section class="deck-card card-profile" id="card-profile">
+        <div class="card-header">
+          <div class="card-header-left">
+            <span class="card-tag">[ PROFILE.DAT ]</span>
+          </div>
+          <div class="card-header-right">
+            <button type="button" class="profile-active-toggle-btn" id="profile-active-btn" title="Toggle System Profile State">
+              <span class="status-dot-mini"></span> ACTIVE
+            </button>
+          </div>
+        </div>
+        <div class="card-content-wrap">
+          <div class="profile-card-body">
+            <div class="profile-avatar-frame crt-profile-frame" id="profile-frame-container">
+              <div class="crt-scanlines"></div>
+              <div class="crt-corner top-left"></div>
+              <div class="crt-corner top-right"></div>
+              <div class="crt-corner bottom-left"></div>
+              <div class="crt-corner bottom-right"></div>
+              
+              <!-- Profile Image -->
+              <img src="photo/portrait/azim_edited_1_crop.webp" alt="Azim Amil" id="profile-img">
+              
+              <!-- TV Static Overlay Layer -->
+              <div id="tv-static-layer" class="tv-static-layer hidden"></div>
+            </div>
+          </div>
+        </div>
+        <div class="card-empty-restore hidden">
+          <button type="button" class="restore-file-btn">
+            <span class="restore-file-icon">&#128193;</span>
+            <span class="restore-file-name">profile.dat</span>
+            <span class="restore-file-hint">[ click to restore ]</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- 2. TOP-CENTER: Main Console / Readme -->
+      <section class="deck-card card-console" id="about-me-card">
+        <div class="card-header card-header-console">
+          <div class="card-header-left">
+            <span class="card-tag">~/about_me.txt</span>
+          </div>
+          <div class="card-header-right">
+            <span class="terminal-page-indicator" id="about-page-indicator">PAGE 1/3</span>
+            <div class="window-action-controls" id="about-window-controls">
+              <button type="button" class="control-btn red" data-action="close" aria-label="Close panel" title="Close">
+                <span class="btn-icon">&times;</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-content-wrap console-live-content" id="about-live-content">
+          <div class="console-body" id="about-console-body">
+            <!-- JavaScript will dynamically render Page 1, Page 2, and Page 3 here -->
+          </div>
+          <div class="console-footer">
+            <span class="console-hint">[ Tab switches content ]</span>
+            <button id="terminal-next-btn" class="deck-btn-action" type="button">NEXT TAB &gt;</button>
+          </div>
+        </div>
+
+        <div class="card-empty-restore hidden" id="about-empty-state">
+          <button type="button" class="restore-file-btn" id="restore-about-btn">
+            <span class="restore-file-icon" aria-hidden="true">&#128193;</span>
+            <span class="restore-file-name">restore_session.sh</span>
+            <span class="restore-file-hint">[ click to reopen ]</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- 3. TOP-RIGHT: Work, Gallery & Social Launchers -->
+      <section class="deck-card card-launchers" id="card-launchers">
+        <div class="card-header">
+          <div class="card-header-left">
+            <span class="card-tag">[ SOCIAL_LINKS ]</span>
+          </div>
+          <div class="card-header-right">
+            <div class="window-action-controls">
+
+              <button type="button" class="control-btn red" data-action="close" aria-label="Close panel" title="Close">
+                <span class="btn-icon">&times;</span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="card-content-wrap">
+          <div class="launchers-body" id="social-launchers-container"></div>
+        </div>
+        <div class="card-empty-restore hidden">
+          <button type="button" class="restore-file-btn">
+            <span class="restore-file-icon">&#128193;</span>
+            <span class="restore-file-name">launchers.sh</span>
+            <span class="restore-file-hint">[ click to restore ]</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- 4. BOTTOM-LEFT: System Stats & Color Palette Engine -->
+      <section class="deck-card card-stats" id="card-stats">
+        <div class="card-header">
+          <div class="card-header-left">
+            <span class="card-tag">[ SYSTEM_STATS ]</span>
+            <i class="fa fa-microchip stats-icon"></i>
+          </div>
+          <div class="card-header-right">
+            <div class="window-action-controls">
+              <button type="button" class="control-btn red" data-action="close" aria-label="Close panel" title="Close">
+                <span class="btn-icon">&times;</span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="card-content-wrap">
+          <div class="stats-body">
+            <!-- Top Color Palette Controller -->
+            <div class="palette-block">
+              <span class="palette-lbl">// THEME PRESET</span>
+              <div class="palette-controls">
+                <span class="terminal-dot default" data-theme="default" title="Default Matrix Green"></span>
+                <span class="terminal-dot mono" data-theme="mono" title="Monochrome White"></span>
+                <button type="button" class="color-wheel-btn terminal-dot rainbow" data-theme="rainbow" title="Cycle Color Themes" aria-label="Cycle Color Themes"></button>
+              </div>
+            </div>
+
+            <!-- Typography Preset Controller -->
+            <div class="palette-block typography-block">
+              <span class="palette-lbl">// FONT MATRIX</span>
+              <div class="palette-controls font-switcher-controls">
+                <button type="button" class="font-switch-btn active" data-font="avant-garde" title="Avant-Garde (VT323)">A</button>
+                <button type="button" class="font-switch-btn" data-font="cyber" title="Computer Terminal (Share Tech Mono)">C</button>
+                <button type="button" class="font-switch-btn" data-font="formal" title="Formal (Times New Roman)">F</button>
+              </div>
+            </div>
+            
+            <div class="palette-block">
+              <span class="palette-lbl">// VISUAL OVERLAYS</span>
+              <div class="palette-controls">
+                <button type="button" class="retro-mode-btn" id="trigger-fx-burst">GLITCH BURST</button>
+              </div>
+            </div>
+
+            <!-- Bottom Telemetry Metrics Group -->
+            <div class="stats-group">
+              <div class="stat-line">
+                <span class="stat-lbl">VERSION</span>
+                <span class="stat-val" id="stat-version">--</span>
+              </div>
+              <div class="stat-line">
+                <span class="stat-lbl">PROJECTS</span>
+                <span class="stat-val" id="stat-systems">--</span>
+              </div>
+              <div class="stat-line">
+                <span class="stat-lbl">DESIGNS</span>
+                <span class="stat-val" id="stat-artifacts">--</span>
+              </div>
+              <div class="stat-line">
+                <span class="stat-lbl">STATUS</span>
+                <span class="stat-val highlight" id="stat-status">--</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-empty-restore hidden">
+          <button type="button" class="restore-file-btn">
+            <span class="restore-file-icon">&#128193;</span>
+            <span class="restore-file-name">stats.sys</span>
+            <span class="restore-file-hint">[ click to restore ]</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- 5. BOTTOM-CENTER: Skills + New Card, partitioned side-by-side in one grid slot -->
+      <div class="deck-split-row" id="skills-split-row">
+
+        <section class="deck-card card-skills" id="card-skills">
+          <div class="card-header">
+            <div class="card-header-left">
+              <span class="card-tag">[ CREDENTIALS_AND_SKILLS.CONF ]</span>
+              <span class="card-subtag">&gt;_</span>
+            </div>
+            <div class="card-header-right">
+              <div class="window-action-controls">
+                <button type="button" class="control-btn red" data-action="close" aria-label="Close panel" title="Close">
+                  <span class="btn-icon">&times;</span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="card-content-wrap">
+            <div class="skills-body"></div>
+          </div>
+          <div class="card-empty-restore hidden">
+            <button type="button" class="restore-file-btn">
+              <span class="restore-file-icon">&#128193;</span>
+              <span class="restore-file-name">skills.conf</span>
+              <span class="restore-file-hint">[ click to restore ]</span>
+            </button>
+          </div>
+        </section>
+
+
+        <section class="deck-card card-new" id="card-new">
+          <div class="card-header">
+            <div class="card-header-left">
+              <span class="card-tag">[ music.mp3 ]</span>
+            </div>
+            <div class="card-header-right">
+              <div class="window-action-controls">
+                <button type="button" class="control-btn red" data-action="close" aria-label="Close panel" title="Close">
+                  <span class="btn-icon">&times;</span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="card-content-wrap">
+            <div class="terminal-spotify-body">
+              <div class="vinyl-disc-container">
+                <div class="vinyl-record" id="vinyl-record">
+                  <div class="vinyl-grooves"></div>
+                  <div class="vinyl-label">
+                    <span class="vinyl-center-dot"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="spotify-meta">
+                <span class="track-title" id="track-title">Before The Fade — Azim-OS</span>
+                <span class="track-status" id="track-status">// PAUSED</span>
+              </div>
+              
+              <div class="spotify-progress-group">
+                <div class="terminal-progress-bar">
+                  <span id="progress-bar-fill">[░░░░░░░░░░]</span>
+                </div>
+                <div class="spotify-volume-row">
+                  <label class="volume-lbl" for="volume-slider">VOL:</label>
+                  <input type="range" id="volume-slider" min="0" max="1" step="0.05" value="0.5">
+                </div>
+              </div>
+
+              <div class="spotify-controls">
+                <button type="button" id="prev-track-btn" class="font-switch-btn">&lt;&lt;</button>
+                <button type="button" id="audio-toggle-btn" class="deck-btn-action">♫ PLAY</button>
+                <button type="button" id="next-track-btn" class="font-switch-btn">&gt;&gt;</button>
+                <button type="button" id="speed-toggle-btn" class="font-switch-btn" title="Toggle Vinyl Speed">1.0x</button>
+              </div>
+            </div>
+          </div>
+          <div class="card-empty-restore hidden">
+            <button type="button" class="restore-file-btn">
+              <span class="restore-file-icon">&#128193;</span>
+              <span class="restore-file-name">music.mp3</span>
+              <span class="restore-file-hint">[ click to restore ]</span>
+            </button>
+          </div>
+        </section>
+      </div>
+
+      
+
+      <!-- 6. BOTTOM-RIGHT: Contact (Large Message Layout) -->
+      <section class="deck-card card-contact" id="card-contact">
+        <div class="card-header">
+          <div class="card-header-left">
+            <span class="card-tag">[ CONTACTS.SH ]</span>
+            <span class="status-indicator-ping"></span>
+          </div>
+          <div class="card-header-right">
+            <div class="window-action-controls">
+              <button type="button" class="control-btn red" data-action="close" aria-label="Close panel" title="Close">
+                <span class="btn-icon">&times;</span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="card-content-wrap">
+          <div class="contact-deck-body">
+            <form id="contact-form" class="contact-terminal-form" action="https://formspree.io/f/xdkpobvv" method="POST">
+              <div class="contact-meta-row">
+                <div class="form-row compact">
+                  <label for="form-name">Name</label>
+                  <input type="text" id="form-name" name="name" autocomplete="name" placeholder="Enter name..." required>
+                </div>
+                <div class="form-row compact">
+                  <label for="form-email">Email</label>
+                  <input type="email" id="form-email" name="email" autocomplete="email" placeholder="Enter email..." required>
+                </div>
+              </div>
+
+              <!-- Large, Prominent Message Field with 300-Character Limit -->
+              <div class="form-row large-msg-row">
+                <div class="msg-header-row">
+                  <label for="form-message">Transmission Message</label>
+                  <span id="char-counter">0 / 300</span>
+                </div>
+                <textarea id="form-message" name="message" rows="5" maxlength="300" placeholder="Type your message here (max 300 chars)..." required></textarea>
+              </div>
+
+              <!-- Appropriate Terminal Action Button -->
+              <button type="submit" class="deck-btn-action contact-transmit-btn">
+                <span class="btn-prefix">&gt;_</span> TRANSMIT MESSAGE
+              </button>
+              <p id="form-status" class="contact-form-status"></p>
+            </form>
+          </div>
+        </div>
+        <div class="card-empty-restore hidden">
+          <button type="button" class="restore-file-btn">
+            <span class="restore-file-icon">&#128193;</span>
+            <span class="restore-file-name">contacts.sh</span>
+            <span class="restore-file-hint">[ click to restore ]</span>
+          </button>
+        </div>
+
+        <!-- THEME TRANSMISSION SUCCESS ALERT MODAL -->
+        <div id="contact-alert-modal" class="deck-modal-overlay hidden">
+          <div class="deck-modal-window alert-window">
+            <div class="explorer-header-bar">
+              <span class="explorer-title">system_notification.sys</span>
+              <div class="explorer-controls">
+                <span class="control-dot red" id="close-contact-alert"></span>
+              </div>
+            </div>
+            <div class="alert-window-body">
+              <div class="alert-window-icon" aria-hidden="true">📡</div>
+              <h3>TRANSMISSION SUCCESSFUL</h3>
+              <p>
+                Your packet has been successfully routed and transmitted to Azim's terminal inbox.
+              </p>
+              <button type="button" id="dismiss-contact-alert" class="deck-btn-action">ACKNOWLEDGE &amp; CLOSE</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- OVERLAY MODAL: PROJECTS WORKSPACE -->
+  <div id="projects-modal" class="deck-modal-overlay hidden">
+    <div class="deck-modal-window">
+      <div class="explorer-header-bar">
+        <div class="explorer-controls">
+          <span class="control-dot red" data-action="close" title="Close Window"></span>
+        </div>
+        <span class="explorer-title">workspace.code - Project Explorer</span>
+      </div>
+      
+      <div class="explorer-container">
+        <aside class="explorer-sidebar">
+          <div class="sidebar-title">WORKSPACE</div>
+          <div class="file-tree">
+            <details open class="tree-dir">
+              <summary>📁 projects</summary>
+              <details open class="tree-dir" data-project="coco-sorter">
+                <summary>📁 coco-sorter</summary>
+                <div class="tree-file active" data-file="readme" data-project="coco-sorter">📄 README.md</div>
+                <div class="tree-file" data-file="preview" data-project="coco-sorter">🖼️ preview.png</div>
+              </details>
+              <details class="tree-dir" data-project="kamada">
+                <summary>📁 kamada-printing</summary>
+                <div class="tree-file" data-file="readme" data-project="kamada">📄 README.md</div>
+                <div class="tree-file" data-file="preview" data-project="kamada">🖼️ preview.png</div>
+              </details>
+              <details class="tree-dir" data-project="sales-tracker">
+                <summary>📁 sales-tracker</summary>
+                <div class="tree-file" data-file="readme" data-project="sales-tracker">📄 README.md</div>
+                <div class="tree-file" data-file="preview" data-project="sales-tracker">🖼️ preview.png</div>
+              </details>
+            </details>
+          </div>
+        </aside>
+
+        <main class="explorer-viewer">
+          <div class="viewer-tabs"></div>
+          <div class="viewer-content">
+            <div id="editor-alert-overlay" class="editor-alert-overlay hidden">
+              <div class="editor-alert-box">
+                <div class="editor-alert-header">
+                  <span class="alert-dot"></span>
+                  <span class="alert-title">SYSTEM NOTICE</span>
+                </div>
+                <div class="editor-alert-body">
+                  <p>Maximum of 5 active editor tabs reached.</p>
+                  <p class="alert-subtext">Close an open tab in the editor bar to free up workspace memory.</p>
+                  <button type="button" class="alert-dismiss-btn" id="close-editor-alert">DISMISS</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- CocoSorter Content -->
+            <div class="project-view active" id="view-coco-sorter-readme">
+              <div class="code-editor-header">README.md — coco-sorter</div>
+              <div class="code-editor-body markdown-body">
+                <h3># CocoSorter</h3>
+                <p>CocoSorter is an automated sorting system using a Raspberry Pi and Arduino. It classifies coconuts by analyzing color for ripeness with a camera and internal water content via audio from a microphone.</p>
+                <div class="code-meta-section">
+                  <span class="meta-label">// Tech Stack</span>
+                  <div class="tech-tags">
+                    <span>Python</span><span>Arduino</span><span>Raspberry Pi</span><span>Sensor Fusion</span>
+                  </div>
+                </div>
+                <div class="code-links-section">
+                  <a href="https://github.com/zim-code1/coco-sorter-code" class="code-btn" target="_blank">View Code</a>
+                  <button class="code-btn video-button" id="coco-video-btn" type="button">Video Demo</button>
+                </div>
+                <div class="video-container" id="coco-video-embed" style="display: none;">
+                  <iframe class="responsive-video" src="https://www.youtube-nocookie.com/embed/cmrP3IMOn9s" title="YouTube video player" loading="lazy" allowfullscreen></iframe>
+                </div>
+              </div>
+            </div>
+
+            <div class="project-view" id="view-coco-sorter-preview">
+              <div class="code-editor-header">preview.png — coco-sorter</div>
+              <div class="code-editor-body media-body">
+                <div class="project-image-container">
+                  <img src="photo/pd_preview_1.jpeg" loading="lazy" alt="CocoSorter 1" class="project-slide active">
+                  <img src="photo/pd_preview_2.jpeg" loading="lazy" alt="CocoSorter 2" class="project-slide">
+                  <img src="photo/pd_preview_3.jpeg" loading="lazy" alt="CocoSorter 3" class="project-slide">
+                  <button class="prev-btn" aria-label="Previous">&lt;</button>
+                  <button class="next-btn" aria-label="Next">&gt;</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- KAMADA Content -->
+            <div class="project-view" id="view-kamada-readme">
+              <div class="code-editor-header">README.md — kamada-printing</div>
+              <div class="code-editor-body markdown-body">
+                <h3># KAMADA Custom Printing</h3>
+                <p>A web platform for a Zamboanga-based custom printing service, featuring real-time order tracking.</p>
+                <div class="code-meta-section">
+                  <span class="meta-label">// Tech Stack</span>
+                  <div class="tech-tags">
+                    <span>HTML5</span><span>CSS</span><span>Javascript</span><span>PHP</span><span>MySQL</span>
+                  </div>
+                </div>
+                <div class="code-links-section">
+                  <a href="https://kamada-inc.vercel.app/" class="code-btn" target="_blank">Visit Website</a>
+                </div>
+              </div>
+            </div>
+
+            <div class="project-view" id="view-kamada-preview">
+              <div class="code-editor-header">preview.png — kamada-printing</div>
+              <div class="code-editor-body media-body">
+                <div class="project-image-container">
+                  <img src="photo/KAMADA_preview.png" loading="lazy" alt="KAMADA Preview" class="project-slide active">
+                </div>
+              </div>
+            </div>
+
+            <!-- Sales Tracker Content -->
+            <div class="project-view" id="view-sales-tracker-readme">
+              <div class="code-editor-header">README.md — sales-tracker</div>
+              <div class="code-editor-body markdown-body">
+                <h3># Sales Tracker App</h3>
+                <p>Full-stack business financial dashboard with real-time Recharts visualization and Supabase backend.</p>
+                <div class="code-links-section">
+                  <a href="https://business-tracker-view.vercel.app/" class="code-btn" target="_blank">Visit Website</a>
+                  <a href="https://github.com/zim-code1/business-tracker-view" class="code-btn" target="_blank">View Code</a>
+                </div>
+              </div>
+            </div>
+
+            <div class="project-view" id="view-sales-tracker-preview">
+              <div class="code-editor-header">preview.png — sales-tracker</div>
+              <div class="code-editor-body media-body">
+                <div class="project-image-container">
+                  <img src="photo/tracker_preview.png" alt="Sales Tracker Preview" class="project-slide active">
+                </div>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+  </div>
+
+  
+  <!-- OVERLAY MODAL: BADGE GALLERY -->
+  <div id="gallery-modal" class="deck-modal-overlay hidden">
+    <div class="deck-modal-window badge-window">
+      <div class="explorer-header-bar">
+        <span class="explorer-title">retro_badges.rom - Badge Gallery</span>
+        <div class="explorer-controls">
+          <span class="control-dot red" id="close-gallery-btn" data-action="close" role="button" tabindex="0" aria-label="Close" title="Close"></span>
+          <span class="control-dot green" data-action="maximize" role="button" tabindex="0" aria-label="Maximize" title="Maximize"></span>
+        </div>
+      </div>
+      <div class="modal-gallery-body">
+        <div class="badge-gallery-container">
+          <div class="badge-grid"></div>
+          
+          <div class="badge-details">
+            <div class="badge-details-icon" id="detail-badge-icon">
+              <img alt="" id="detail-icon-img" style="display: none;">
+              <span id="detail-icon-txt">?</span>
+            </div>
+            <div class="badge-details-text">
+              <h3 class="badge-name" id="detail-badge-name">???</h3>
+              <p class="badge-desc" id="detail-badge-desc">This badge is locked. Keep exploring the digital realm to unlock it.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OVERLAY MODAL: RETRO CRT PHOTO ARCHIVE VIEWER -->
+  <div id="photo-modal" class="deck-modal-overlay hidden">
+    <div class="deck-modal-window retro-photo-window">
+      <div class="explorer-header-bar">
+        <span class="explorer-title">image_viewer.bin — [ARCHIVE: PORTRAITS]</span>
+        <div class="explorer-controls">
+          <span class="control-dot red" id="close-retro-photo-btn"></span>
+          <span class="control-dot yellow"></span>
+          <span class="control-dot green"></span>
+        </div>
+      </div>
+
+      <div class="retro-photo-container">
+        <div class="retro-crt-screen" id="retro-crt-screen">
+          <div class="crt-scanlines"></div>
+          <div class="crt-corner top-left"></div>
+          <div class="crt-corner top-right"></div>
+          <div class="crt-corner bottom-left"></div>
+          <div class="crt-corner bottom-right"></div>
+
+          <div class="retro-slide active" data-caption="Engr. Muhammad Azim Y. Amil // Business Suit">
+            <img src="photo/portrait/azim_edited_1_crop.webp" alt="Suit Portrait" class="retro-img">
+          </div>
+          <div class="retro-slide" data-caption="Graduation Photo // BS-CpE Class of 2025">
+            <img src="photo/portrait/amil_edited.webp" loading="lazy" alt="Graduation Photo" class="retro-img">
+          </div>
+          <div class="retro-slide" data-caption="Formal Attire // Barong Tagalog">
+            <img src="photo/portrait/azim_edited_2.webp" loading="lazy" alt="Formal Barong" class="retro-img">
+          </div>
+
+          <button class="retro-nav-btn prev" id="retro-prev-btn" type="button" aria-label="Previous Photo">&lt;</button>
+          <button class="retro-nav-btn next" id="retro-next-btn" type="button" aria-label="Next Photo">&gt;</button>
+        </div>
+
+        <div class="retro-photo-controls">
+          <div class="retro-meta-block">
+            <span class="retro-meta-tag">&gt; FILE:</span>
+            <span id="retro-file-caption">Engr. Muhammad Azim Y. Amil // Business Suit</span>
+          </div>
+
+          <div class="retro-view-modes">
+            <span class="retro-mode-lbl">// RENDER:</span>
+            <button type="button" class="retro-mode-btn" id="mode-original-btn">ORIGINAL</button>
+            <button type="button" class="retro-mode-btn active" id="mode-terminal-btn">TERMINAL</button>
+          </div>
+        </div>
+
+        <div class="retro-photo-footer">
+          <span id="retro-index-indicator">IMAGE 01 / 03</span>
+          <span class="retro-hint">[ Click arrows or press &lt; / &gt; to cycle ]</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Minimized Window Dock -->
+  <div id="minimized-dock" class="minimized-dock" aria-live="polite"></div>
+
+  <script src="javascript/script.js" defer></script>
+  <script src="javascript/config.js" defer></script>
+</body>
+
+</html>
