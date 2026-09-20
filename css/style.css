@@ -419,7 +419,6 @@ button {
   -webkit-user-select: none;
   background:
     radial-gradient(circle at center, rgba(var(--color-accent-rgb), 0.08) 0%, rgba(var(--color-dark-bg-rgb), 0.88) 100%),
-    url('../photo/wallpaper.jpg') no-repeat center center / cover;
 }
 
 .desktop-crt-scanlines {
