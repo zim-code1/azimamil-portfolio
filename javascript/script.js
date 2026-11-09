@@ -1,5 +1,5 @@
 /* ==========================================================================
-   AZIM-OS CONTROL DECK MASTER SCRIPT (v2026.09 - DYNAMIC CONFIG)
+   AZIM-OS CONTROL DECK MASTER SCRIPT (v2026.09 - FIXED MODAL TARGETING)
    ========================================================================== */
 document.addEventListener("DOMContentLoaded", () => {
   try {
@@ -11,7 +11,6 @@ document.addEventListener("DOMContentLoaded", () => {
     setupProjectSlideshows();
     setupBadgeGalleryDynamic();
     setupThemeToggling();
-    setupDeckLaunchers();
     setupRetroPhotoViewer();
     setupWindowControls();
     setupDesktopHero();
@@ -33,6 +32,18 @@ document.addEventListener("DOMContentLoaded", () => {
   } catch (e) {
     console.error("Script init error:", e);
   }
+
+  // --- UNIVERSAL MODAL CLOSE DELEGATE ---
+  document.addEventListener('click', (e) => {
+    const closeTarget = e.target.closest('[data-action="close"], .control-btn.red, .control-dot.red, #close-gallery-btn, #close-journal-modal, #close-retro-photo-btn');
+    if (closeTarget) {
+      const modalOverlay = closeTarget.closest('.deck-modal-overlay');
+      if (modalOverlay) {
+        e.stopPropagation();
+        modalOverlay.classList.add('hidden');
+      }
+    }
+  });
 
   // --- 1. DYNAMIC INTRO & BOOT LOGS ---
   function setupIntro(introNodes) {
@@ -87,7 +98,6 @@ document.addEventListener("DOMContentLoaded", () => {
   function setupIntroNodes() {
     const canvas = document.getElementById("node-network-canvas");
     if (!canvas) return { stop: () => {} };
-    const ctx = canvas.getContext("2d");
     let animationFrameId;
 
     function resize() {
@@ -149,27 +159,12 @@ document.addEventListener("DOMContentLoaded", () => {
     scramble(roles[roleIndex]);
   }
 
-  // --- 5. WORK & GALLERY LAUNCHERS ---
-  function setupDeckLaunchers() {
-    const projectsBtn = document.getElementById('open-projects-btn');
-    const galleryBtn = document.getElementById('open-gallery-btn');
-    const projectsModal = document.getElementById('projects-modal');
-    const galleryModal = document.getElementById('gallery-modal');
-
-    if (projectsBtn && projectsModal) {
-      projectsBtn.addEventListener('click', () => projectsModal.classList.remove('hidden'));
-    }
-    if (galleryBtn && galleryModal) {
-      galleryBtn.addEventListener('click', () => galleryModal.classList.remove('hidden'));
-    }
-  }
-
   // --- 6. IDE / PROJECT EXPLORER ---
   function setupProjectExplorer() {
     const fileElements = document.querySelectorAll('.tree-file');
     const tabsContainer = document.querySelector('.viewer-tabs');
     const projectViews = document.querySelectorAll('.project-view');
-    const DEFAULT_VIEW = { project: 'coco-sorter', fileType: 'readme' };
+    const DEFAULT_VIEW = { project: 'CoCo-sorter', fileType: 'readme' };
     if (!fileElements.length || !tabsContainer) return;
 
     const MAX_TABS = 5;
@@ -180,7 +175,7 @@ document.addEventListener("DOMContentLoaded", () => {
       dismissAlertBtn.addEventListener('click', () => alertOverlay.classList.add('hidden'));
     }
 
-    let openTabs = [{ project: 'coco-sorter', fileType: 'readme', label: 'README.md (coco-sorter)' }];
+    let openTabs = [{ project: 'CoCo-sorter', fileType: 'readme', label: 'README.md (CoCo-sorter)' }];
     let activeTabIndex = 0;
 
     function closeTab(index) {
@@ -227,7 +222,6 @@ document.addEventListener("DOMContentLoaded", () => {
       projectViews.forEach(v => v.classList.remove('active'));
       fileElements.forEach(f => f.classList.remove('active'));
 
-      // No tab open: fall back to the default README view (no tab is drawn for it)
       const cur = openTabs[activeTabIndex] || DEFAULT_VIEW;
       const targetView = document.getElementById(`view-${cur.project}-${cur.fileType}`);
       if (targetView) targetView.classList.add('active');
@@ -576,45 +570,15 @@ document.addEventListener("DOMContentLoaded", () => {
         if (emptyRestore) emptyRestore.classList.add('hidden');
       };
 
-      if (closeBtn) {
-        closeBtn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          hideCard();
-        });
-      }
-
-      if (toggleBtn) {
-        toggleBtn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          showCard();
-        });
-      }
-
-      if (restoreBtn) {
-        restoreBtn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          showCard();
-        });
-      }
-    });
-
-    ['projects-modal', 'gallery-modal', 'photo-modal', 'contact-alert-modal'].forEach(overlayId => {
-      const overlay = document.getElementById(overlayId);
-      if (!overlay) return;
-      const closeBtn = overlay.querySelector('[data-action="close"], .control-dot.red');
-      if (closeBtn) {
-        closeBtn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          overlay.classList.add('hidden');
-        });
-      }
+      if (closeBtn) closeBtn.addEventListener('click', (e) => { e.stopPropagation(); hideCard(); });
+      if (toggleBtn) toggleBtn.addEventListener('click', (e) => { e.stopPropagation(); showCard(); });
+      if (restoreBtn) restoreBtn.addEventListener('click', (e) => { e.stopPropagation(); showCard(); });
     });
   }
 });
 
 // --- RETRO CRT PHOTO ARCHIVE VIEWER CONTROLLER ---
 function setupRetroPhotoViewer() {
-  const viewPhotosLink = document.getElementById('view-photos-link');
   const photoModal = document.getElementById('photo-modal');
   const closeBtn = document.getElementById('close-retro-photo-btn');
   const crtScreen = document.getElementById('retro-crt-screen');
@@ -639,20 +603,6 @@ function setupRetroPhotoViewer() {
     if (captionEl) captionEl.textContent = caption;
     if (indexIndicator) indexIndicator.textContent = `IMAGE 0${index + 1} / 0${slides.length}`;
   };
-
-  if (viewPhotosLink) {
-    viewPhotosLink.addEventListener('click', (e) => {
-      e.preventDefault();
-      photoModal.classList.remove('hidden');
-      showSlide(currentIndex);
-    });
-  }
-
-  if (closeBtn) closeBtn.addEventListener('click', () => photoModal.classList.add('hidden'));
-
-  photoModal.addEventListener('click', (e) => {
-    if (e.target === photoModal) photoModal.classList.add('hidden');
-  });
 
   if (nextBtn) {
     nextBtn.addEventListener('click', (e) => {
@@ -694,10 +644,7 @@ function setupDesktopHero() {
   heroTrigger.addEventListener('click', () => deckContainer.classList.remove('minimized-to-desktop'));
 
   const deckCloseBtn = deckContainer.querySelector('[data-action="deck-close"]');
-  const deckMaxBtn = deckContainer.querySelector('[data-action="deck-maximize"]');
-
   if (deckCloseBtn) deckCloseBtn.addEventListener('click', () => deckContainer.classList.add('minimized-to-desktop'));
-  if (deckMaxBtn) deckMaxBtn.addEventListener('click', () => deckContainer.classList.toggle('maximized'));
 }
 
 // --- PROFILE ACTIVE / DEACTIVATED TOGGLE ---
@@ -735,12 +682,7 @@ function setupContactFormSubmission() {
   const dismissBtn = document.getElementById('dismiss-contact-alert');
   const closeDot = document.getElementById('close-contact-alert');
   const statusText = document.getElementById('form-status');
-  if (!form || !alertModal) return;
-
-  const hideAlert = () => alertModal.classList.add('hidden');
-  if (dismissBtn) dismissBtn.addEventListener('click', hideAlert);
-  if (closeDot) closeDot.addEventListener('click', hideAlert);
-  alertModal.addEventListener('click', (e) => { if (e.target === alertModal) hideAlert(); });
+  if (!form) return;
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -764,20 +706,20 @@ function setupContactFormSubmission() {
         form.reset();
         const counter = document.getElementById('char-counter');
         if (counter) counter.textContent = '0 / 300';
-        if (statusText) statusText.style.display = 'none';
-        alertModal.classList.remove('hidden');
+        if (statusText) {
+          statusText.style.color = 'var(--color-ok)';
+          statusText.textContent = 'Transmission sent successfully!';
+        }
       } else {
         if (statusText) {
           statusText.style.color = '#ff5f56';
           statusText.textContent = data.error || 'Transmission failed. Try again.';
-          statusText.style.display = 'block';
         }
       }
     } catch (error) {
       if (statusText) {
         statusText.style.color = '#ff5f56';
         statusText.textContent = 'Network error. Check connection.';
-        statusText.style.display = 'block';
       }
     }
   });
@@ -866,59 +808,59 @@ function setupVisualOverlays() {
 
 // --- JOURNAL LOG CONTROLLER ---
 function setupJournalLog() {
-  const container = document.getElementById('journal-entries-container');
-  const modalContainer = document.getElementById('full-journal-container');
-  const toggleBtn = document.getElementById('journal-toggle-view-btn');
-  const modal = document.getElementById('journal-forum-modal');
-  const closeBtn = document.getElementById('close-journal-modal');
-  
+  const container = document.getElementById('full-journal-container');
   const journalData = window.AZIM_CONFIG?.journal || [];
   if (!container) return;
 
-  const renderEntries = (limit) => {
-    const items = limit ? journalData.slice(0, limit) : journalData;
-    container.innerHTML = items.map(j => `
-      <div class="journal-entry">
-        <span style="color: var(--color-accent); font-weight: bold;">[${j.date}]</span>: ${j.text}
-      </div>
-    `).join('');
-  };
-
-  renderEntries(2);
-
-  if (toggleBtn && modal) {
-    toggleBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      modal.classList.remove('hidden');
-      if (modalContainer) {
-        modalContainer.innerHTML = journalData.map(j => `
-          <div style="border-bottom: 1px dashed rgba(var(--color-accent-rgb), 0.3); padding-bottom: 8px;">
-            <span style="color: var(--color-accent); font-weight: bold;">[${j.date}]</span>
-            <p style="color: var(--color-light-text); margin-top: 4px; font-size: 0.95rem;">${j.text}</p>
-          </div>
-        `).join('');
-      }
-    });
-  }
-
-  if (closeBtn && modal) {
-    closeBtn.addEventListener('click', () => modal.classList.add('hidden'));
-  }
+  container.innerHTML = journalData.map(j => `
+    <div style="border-bottom: 1px dashed rgba(var(--color-accent-rgb), 0.3); padding-bottom: 8px;">
+      <span style="color: var(--color-accent); font-weight: bold;">[${j.date}]</span>
+      <p style="color: var(--color-light-text); margin-top: 4px; font-size: 0.95rem;">${j.text}</p>
+    </div>
+  `).join('');
 }
 
-// --- LIVE CLOCK ---
 function setupLiveClock() {
   const clockEl = document.getElementById('pc-clock');
   if (!clockEl) return;
 
   function updateClock() {
     const now = new Date();
-    const options = { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true };
-    const formattedString = now.toLocaleDateString('en-US', options);
-    const tzMatch = now.toLocaleTimeString('en-US', { timeZoneName: 'short' }).split(' ').pop();
-    const timezone = tzMatch || Intl.DateTimeFormat().resolvedOptions().timeZone;
-    clockEl.textContent = `${formattedString} ${timezone}`;
+    const visitorTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+    const localOptions = { 
+      weekday: 'short', 
+      month: 'short', 
+      day: 'numeric', 
+      hour: 'numeric', 
+      minute: '2-digit', 
+      second: '2-digit', 
+      hour12: true,
+      timeZone: 'Asia/Manila' 
+    };
+
+    const visitorOptions = { 
+      weekday: 'short', 
+      month: 'short', 
+      day: 'numeric', 
+      hour: 'numeric', 
+      minute: '2-digit', 
+      second: '2-digit', 
+      hour12: true,
+      timeZone: visitorTimeZone 
+    };
+
+    const localString = now.toLocaleDateString('en-US', localOptions);
+    const visitorString = now.toLocaleDateString('en-US', visitorOptions);
+    const cleanZoneName = visitorTimeZone.split('/').pop().replace('_', ' ');
+
+    if (visitorTimeZone !== 'Asia/Manila' && visitorTimeZone !== 'Asia/Singapore') {
+      clockEl.textContent = `[LOCAL]: ${visitorString} (${cleanZoneName}) | [ZAMBOANGA]: ${localString} GMT+8`;
+    } else {
+      clockEl.textContent = `[DATE]: ${localString} GMT+8`;
+    }
   }
+
   updateClock();
   setInterval(updateClock, 1000);
 }
@@ -939,7 +881,7 @@ function setupSystemStats() {
   if (statusEl) statusEl.textContent = stats.statusText;
 }
 
-// --- DYNAMIC CONFIG ENDPOINTS & FORM ACTION ---
+// --- DYNAMIC CONFIG ENDPOINTS ---
 function setupConfigEndpoints() {
   if (!window.AZIM_CONFIG) return;
   const cfg = window.AZIM_CONFIG;
@@ -1071,48 +1013,64 @@ function setupAboutConsoleDynamic() {
   }
 }
 
+// --- DESKTOP FOLDER ICON LAUNCHER & SELECTION ENGINE ---
 function setupDesktopFolders() {
-  const projFolder = document.getElementById('open-desktop-projects');
-  const galFolder = document.getElementById('open-desktop-gallery');
-  const projModal = document.getElementById('projects-modal');
-  const galModal = document.getElementById('gallery-modal');
+  const folderMappings = [
+    { elId: 'open-desktop-projects', modalId: 'projects-modal' },
+    { elId: 'open-desktop-gallery', modalId: 'gallery-modal' },
+    { elId: 'open-desktop-socials', modalId: 'socials-modal' },
+    { elId: 'open-desktop-skills', modalId: 'skills-modal' },
+    { elId: 'open-desktop-music', modalId: 'music-modal' },
+    { elId: 'open-desktop-contact', modalId: 'contact-modal' },
+    { elId: 'open-desktop-stats', modalId: 'stats-modal' }
+  ];
 
-  if (projFolder && projModal) {
-    projFolder.addEventListener('click', () => projModal.classList.remove('hidden'));
+  function resetAllFolders() {
+    document.querySelectorAll('.desktop-folder-icon').forEach(f => {
+      f.classList.remove('selected');
+      const ind = f.querySelector('.dbl-indicator');
+      if (ind) ind.textContent = '∷';
+    });
   }
-  if (galFolder && galModal) {
-    galFolder.addEventListener('click', () => galModal.classList.remove('hidden'));
-  }
+
+  folderMappings.forEach(({ elId, modalId }) => {
+    const el = document.getElementById(elId);
+    const modal = document.getElementById(modalId);
+    if (!el || !modal) return;
+
+    const indicator = el.querySelector('.dbl-indicator');
+
+    // Double-click opens the modal window
+    el.addEventListener('dblclick', (e) => {
+      e.stopPropagation();
+      modal.classList.remove('hidden');
+      resetAllFolders();
+    });
+
+    // Single click / Touch selection trigger
+    el.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isSelected = el.classList.contains('selected');
+      resetAllFolders();
+
+      if (!isSelected) {
+        el.classList.add('selected');
+        if (indicator) indicator.textContent = ':';
+      }
+    });
+  });
+
+  document.addEventListener('click', () => resetAllFolders());
 }
 
 function setupJournalForumModal() {
-  const toggleBtn = document.getElementById('journal-toggle-view-btn');
   const modal = document.getElementById('journal-forum-modal');
   const closeBtn = document.getElementById('close-journal-modal');
-  const container = document.getElementById('full-journal-container');
-
-  if (!toggleBtn || !modal) return;
-
-  const journalData = window.AZIM_CONFIG?.journal || [];
-
-  toggleBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    modal.classList.remove('hidden');
-    if (container) {
-      container.innerHTML = journalData.map(j => `
-        <div style="border-bottom: 1px dashed rgba(var(--color-accent-rgb), 0.3); padding-bottom: 8px;">
-          <span style="color: var(--color-accent); font-weight: bold;">[${j.date}]</span>
-          <p style="color: var(--color-light-text); margin-top: 4px; font-size: 0.95rem;">${j.text}</p>
-        </div>
-      `).join('');
-    }
-  });
-
+  if (!modal) return;
   if (closeBtn) closeBtn.addEventListener('click', () => modal.classList.add('hidden'));
-  modal.addEventListener('click', (e) => { if (e.target === modal) modal.classList.add('hidden'); });
 }
 
-// --- COMPLETE ADVANCED SPOTIFY PLAYER (WITH LOOP & BEAT GLOW) ---
+// --- COMPLETE ADVANCED SPOTIFY PLAYER ---
 function setupAdvancedSpotifyPlayer() {
   const btn = document.getElementById('audio-toggle-btn');
   const prevBtn = document.getElementById('prev-track-btn');
@@ -1164,45 +1122,6 @@ function setupAdvancedSpotifyPlayer() {
   let currentSpeedMultiplier = 1.0;
   const speeds = [1.0, 1.5, 2.0];
   let speedIndex = 0;
-  let isLooping = false;
-  let activeOscillators = [];
-
-  function playNote(freq, startTime, duration, wave) {
-    if (!freq || !audioCtx) return;
-    const osc = audioCtx.createOscillator();
-    const noteGain = audioCtx.createGain();
-    
-    osc.type = wave;
-    osc.frequency.setValueAtTime(freq, startTime);
-    noteGain.gain.setValueAtTime(0.0001, startTime);
-    noteGain.gain.exponentialRampToValueAtTime(0.25, startTime + 0.015);
-    noteGain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
-    
-    osc.connect(noteGain);
-    noteGain.connect(masterGain);
-    
-    osc.start(startTime);
-    osc.stop(startTime + duration + 0.02);
-    
-    activeOscillators.push(osc);
-    osc.onended = () => {
-      osc.disconnect();
-      noteGain.disconnect();
-      activeOscillators = activeOscillators.filter(o => o !== osc);
-    };
-  }
-
-  function stopPlayback() {
-    clearTimeout(schedulerTimer);
-    activeOscillators.forEach(osc => {
-      try { osc.stop(); osc.disconnect(); } catch (e) {}
-    });
-    activeOscillators = [];
-    if (audioCtx && audioCtx.state === 'running') {
-      audioCtx.suspend();
-    }
-    setPlayingUI(false);
-  }
 
   function ensureContext() {
     if (audioCtx) return;
@@ -1249,13 +1168,7 @@ function setupAdvancedSpotifyPlayer() {
     const track = playlist[currentIndex];
     
     if (stepIndex >= track.lead.length) {
-      if (isLooping) {
-        stepIndex = 0;
-      } else {
-        currentIndex = (currentIndex + 1) % playlist.length;
-        stepIndex = 0;
-        if (titleEl) titleEl.textContent = playlist[currentIndex].title;
-      }
+      stepIndex = 0;
     }
 
     const stepSeconds = (60 / track.bpm / 2) / currentSpeedMultiplier;
@@ -1340,10 +1253,6 @@ function setupAdvancedSpotifyPlayer() {
       if (masterGain) masterGain.gain.value = parseFloat(e.target.value);
     });
   }
-
-  // Auto-pause when card is closed or minimized
-  const cardCloseBtn = document.querySelector('#card-new .control-btn.red');
-  if (cardCloseBtn) cardCloseBtn.addEventListener('click', stopPlayback);
 
   if (titleEl) titleEl.textContent = playlist[currentIndex].title;
 }

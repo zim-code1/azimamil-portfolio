@@ -487,15 +487,18 @@ button {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
-  max-width: 100%;
-  padding: 20px 30px;
-  border: none;
-  border-radius: 8px;
-  background: transparent;
-  cursor: pointer;
-  outline: none;
-  transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+  gap: 18px;
+  max-width: 900px;
+  padding: 36px 48px;
+  border: 1px solid rgba(var(--color-accent-rgb), 0.3);
+  border-radius: 12px;
+  background: rgba(5, 11, 5, 0.65);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  box-shadow: 
+    0 0 30px rgba(0, 0, 0, 0.8),
+    inset 0 0 15px rgba(var(--color-accent-rgb), 0.1);
+  transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
 .desktop-hero-title {
@@ -511,6 +514,16 @@ button {
     0 0 14px rgba(var(--color-accent-rgb), 0.95),
     0 0 32px rgba(var(--color-accent-rgb), 0.45);
 }
+
+.hero-sys-tag {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  letter-spacing: 2px;
+  color: var(--color-accent-subtle);
+  text-shadow: 0 0 6px rgba(var(--color-accent-rgb), 0.4);
+}
+
+
 
 .desktop-hero-pill {
   display: flex;
@@ -550,6 +563,17 @@ button {
   transition: opacity 0.2s ease, color 0.2s ease;
 }
 
+@keyframes blink-cursor {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+.hero-cursor {
+  color: var(--color-accent);
+  animation: blink-cursor 1s infinite;
+  font-weight: bold;
+  margin-left: 2px;
+}
+
 @media (hover: hover) {
   .desktop-hero-card:hover {
     transform: scale(1.03);
@@ -584,19 +608,82 @@ button {
 
 .desktop-folder-icon {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 8px;
-  width: 130px;
-  padding: 8px 12px;
-  border: 1px dashed var(--color-accent);
-  border-radius: var(--radius);
-  background: rgba(0, 0, 0, 0.6);
-  color: var(--color-light-text);
-  font-family: var(--font-mono);
-  font-size: 1rem;
-  text-align: left;
+  justify-content: center;
+  width: 90px;
+  padding: 10px 6px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 4px;
   cursor: pointer;
-  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+  user-select: none;
+  transition: all 0.15s ease;
+}
+
+.desktop-folder-icon.selected {
+  background: rgba(var(--color-accent-rgb), 0.2);
+  border: 1px dashed rgba(var(--color-accent-rgb), 0.6);
+  border-radius: var(--radius);
+  box-shadow: 0 0 10px rgba(var(--color-accent-rgb), 0.3);
+}
+
+.folder-icon-graphic {
+  position: relative;
+  font-size: 2.2rem;
+  margin-bottom: 4px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.8));
+  transition: transform 0.15s ease;
+}
+
+/* Retro double-click indicator badge */
+.dbl-indicator {
+  position: absolute;
+  bottom: -2px;
+  right: -6px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: bold;
+  color: var(--color-accent);
+  text-shadow: 0 0 4px rgba(var(--color-accent-rgb), 0.8);
+  background: rgba(0, 0, 0, 0.85);
+  padding: 0 3px;
+  border-radius: 2px;
+  border: 1px solid rgba(var(--color-accent-rgb), 0.4);
+  transition: all 0.2s ease;
+}
+
+/* Single-Click / Selected State (Red/Amber Alert Indicator) */
+.desktop-folder-icon.selected .dbl-indicator {
+  color: var(--color-warn); /* or var(--color-danger) for red */
+  border-color: var(--color-warn);
+  text-shadow: 0 0 6px var(--color-warn);
+  box-shadow: 0 0 8px rgba(255, 189, 46, 0.4);
+  animation: pulse-dot 1s infinite ease-in-out;
+}
+
+.folder-label {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: #ffffff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9), 0 0 5px rgba(var(--color-accent-rgb), 0.6);
+  text-align: center;
+  word-break: break-all;
+}
+
+/* Hover and Focus States (Desktop Selection Style) */
+.desktop-folder-icon:hover {
+  background: rgba(var(--color-accent-rgb), 0.15);
+  border-color: rgba(var(--color-accent-rgb), 0.4);
+  box-shadow: 0 0 10px rgba(var(--color-accent-rgb), 0.2);
+}
+
+.desktop-folder-icon:hover .folder-icon-graphic {
+  transform: scale(1.08);
+}
+
+.desktop-folder-icon:active {
+  background: rgba(var(--color-accent-rgb), 0.3);
 }
 
 .desktop-folder-icon:hover {
@@ -635,6 +722,8 @@ button {
 /* ==========================================================================
    04. DECK SHELL (master window, header, grid)
    ========================================================================== */
+/* Master Terminal Container - Bidirectional Windows 7 Aero Transition */
+/* Master Terminal Container - Windows 7 Aero Transition */
 #deck-container {
   position: fixed;
   inset: calc(var(--bar-h) + var(--safe-top) + var(--gap)) 14px calc(14px + var(--safe-bottom));
@@ -646,16 +735,28 @@ button {
   border-radius: var(--radius);
   background: rgba(var(--color-dark-bg-rgb), 0.96);
   box-shadow: 0 0 25px rgba(0, 0, 0, 0.9), 0 0 15px rgba(var(--color-accent-rgb), 0.2);
-  transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.25s ease, visibility 0s linear 0s;
+  
+  /* Open state properties */
+  transform: scale(1) translateY(0);
+  opacity: 1;
+  visibility: visible;
+  transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1), 
+              opacity 0.3s ease, 
+              visibility 0s linear 0s; /* Visible instantly when opening */
+  transform-origin: center bottom;
 }
 
-/* Closed to wallpaper. visibility keeps hidden controls out of the tab order. */
+/* Minimized to Desktop state */
 #deck-container.minimized-to-desktop {
-  transform: scale(0.92);
+  transform: scale(0.05) translateY(350px);
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.25s ease, visibility 0s linear 0.25s;
+  
+  /* Delay visibility: hidden until AFTER the scale/opacity animation finishes */
+  transition: transform 0.3s cubic-bezier(0.5, 0, 0.8, 0.2), 
+              opacity 0.25s ease, 
+              visibility 0s linear 0.3s; 
 }
 
 .deck-top-bar {
@@ -970,6 +1071,30 @@ button {
   0%   { transform: rotate(0deg) scale(1); }
   100% { transform: rotate(360deg) scale(2.2); }
 }
+
+@keyframes crt-breathe {
+  0%, 100% {
+    text-shadow: 0 2px 0 #000000, 0 0 14px rgba(var(--color-accent-rgb), 0.95), 0 0 32px rgba(var(--color-accent-rgb), 0.45);
+  }
+  50% {
+    text-shadow: 0 2px 0 #000000, 0 0 20px rgba(var(--color-accent-rgb), 1), 0 0 45px rgba(var(--color-accent-rgb), 0.7);
+  }
+}
+
+.desktop-hero-title {
+  margin: 0;
+  font-family: var(--font-pixel);
+  font-size: clamp(3rem, 6vw, 5rem);
+  line-height: 1.15;
+  letter-spacing: 3px;
+  text-align: center;
+  color: #ffffff;
+  text-shadow:
+    0 3px 0 #000000,
+    0 0 20px rgba(var(--color-accent-rgb), 0.95),
+    0 0 45px rgba(var(--color-accent-rgb), 0.45);
+}
+
 
 .tv-static-layer {
   position: absolute;
@@ -1734,13 +1859,26 @@ button {
   background: rgba(3, 8, 4, 0.94);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
+
+  /* Smooth open state */
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.3s ease, visibility 0s linear 0s;
 }
+
+.deck-modal-overlay.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.25s ease, visibility 0s linear 0.25s;
+}
+
 
 #contact-alert-modal {
   z-index: 2500;
 }
 
-/* Default window = the project explorer (large workspace) */
+/* All Modal Windows Scaling & Aero Transition */
 .deck-modal-window {
   display: flex;
   flex-direction: column;
@@ -1751,6 +1889,17 @@ button {
   border-radius: 6px;
   background: var(--color-dark-bg);
   box-shadow: 0 0 30px rgba(0, 0, 0, 0.95), 0 0 15px rgba(var(--color-accent-rgb), 0.3);
+  
+  /* Open scale state */
+  transform: scale(1) translateY(0);
+  transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+  transform-origin: center center;
+}
+
+/* When any modal overlay is hidden, its window scales down and drops */
+.deck-modal-overlay.hidden .deck-modal-window {
+  transform: scale(0.92) translateY(15px);
+  transition: transform 0.25s cubic-bezier(0.5, 0, 0.8, 0.2);
 }
 
 .deck-modal-window.maximized {
@@ -1759,6 +1908,21 @@ button {
   max-width: none;
   border-radius: 0;
   border-width: 0;
+}
+
+.deck-modal-window.app-window-sm {
+  width: min(92vw, 480px);
+  height: auto;
+  max-height: 82vh;
+}
+
+.deck-modal-window.app-window-sm .card-content-wrap,
+.deck-modal-window.app-window-sm .stats-body,
+.deck-modal-window.app-window-sm .terminal-spotify-body,
+.deck-modal-window.app-window-sm .contact-deck-body,
+.deck-modal-window.app-window-sm .skills-body {
+  overflow-y: auto;
+  max-height: calc(82vh - 40px);
 }
 
 /* Compact windows size to their content */
@@ -2615,7 +2779,19 @@ body.font-cyber .font-switch-btn {
   }
 
   .desktop-hero-pill {
-    padding: 6px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-width: min(380px, 90vw);
+    padding: 10px 28px;
+    border: 1.5px solid var(--color-accent);
+    border-radius: var(--radius);
+    background: rgba(10, 16, 12, 0.9);
+    box-shadow:
+      0 0 20px rgba(0, 0, 0, 0.9),
+      0 0 15px rgba(var(--color-accent-rgb), 0.4),
+      inset 0 0 10px rgba(var(--color-accent-rgb), 0.2);
   }
 
   .desktop-hero-role {

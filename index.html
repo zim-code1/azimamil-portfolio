@@ -43,33 +43,75 @@
     <div class="desktop-crt-scanlines"></div>
 
     <!-- Top OS Status Bar: Live Clock & Deck Switcher -->
-    <div class="pc-top-panel">
-      <div class="pc-panel-center">
-        <span>[DATE]: </span>
-        <span id="pc-clock">Initializing...</span>
-      </div>
+    <!-- Top OS Status Bar: Live Clock & Deck Switcher -->
+  <div class="pc-top-panel">
+    <div class="pc-panel-center">
+      <span id="pc-clock">Initializing...</span>
     </div>
+  </div>
 
-    <!-- Center Hero Presentation (Matching Reference Image 2: "I'm Azim" + Role Scrambler) -->
     <main class="desktop-hero-stage">
       <button type="button" class="desktop-hero-card" id="desktop-hero-trigger" aria-label="Open Control Deck">
+        <!-- OS System Tag -->
+        <span class="hero-sys-tag">[ SYSTEM_HOST: PORTFOLIO-AMIL // v2026.11 ]</span>
+
+        <!-- Main Title -->
         <h1 class="desktop-hero-title">I'm Azim</h1>
+
+        <!-- Enhanced Role Pill with Blinking Cursor -->
         <div class="desktop-hero-pill">
-          <span class="desktop-hero-role" id="hero-roles">Software Engineer</span>
+          <span class="hero-prompt-prefix"></span>
+          <span class="desktop-hero-role" id="hero-roles">Software Engineer</span><span class="hero-cursor">_</span>
         </div>
-        <span class="desktop-hero-prompt">[ Click the header or have fun with Pixelated Background :> ]</span>
+
+        <!-- Tech Spec Badges -->
+        <div class="hero-spec-bar">
+          <span class="spec-chip">CORE: Python / JavaScript</span>
+          <span class="spec-chip">SYS: Linux</span>
+          <span class="spec-chip">UI: Pixel/CRT</span>
+        </div>
+
+        <!-- Enhanced Prompt -->
+        <span class="desktop-hero-prompt">[ CLICK HEADER TO INITIATE CONTROL DECK ]</span>
       </button>
     </main>
 
-    <!-- Inside <div id="pc-desktop" class="pc-desktop">, add: -->
     <div class="desktop-icons-dock">
-      <button type="button" class="desktop-folder-icon" id="open-desktop-projects">
-        <span class="folder-icon">📁</span>
-        <span class="folder-label">projects/</span>
+
+      <button type="button" class="desktop-folder-icon" id="open-desktop-projects" title="Double-click to open projects/">
+        <span class="folder-icon-graphic">📁<span class="dbl-indicator">∷</span></span>
+        <span class="folder-label">projects</span>
       </button>
-      <button type="button" class="desktop-folder-icon" id="open-desktop-gallery">
-        <span class="folder-icon">⭐</span>
+      
+      <button type="button" class="desktop-folder-icon" id="open-desktop-gallery" title="Double-click to open badges.rom">
+        <span class="folder-icon-graphic">⭐<span class="dbl-indicator">∷</span></span>
         <span class="folder-label">badges.rom</span>
+      </button>
+
+      <!-- Modularized System Apps -->
+      <button type="button" class="desktop-folder-icon" id="open-desktop-socials" title="Double-click to open social_links">
+        <span class="folder-icon-graphic">🌐<span class="dbl-indicator">∷</span></span>
+        <span class="folder-label">socials</span>
+      </button>
+
+      <button type="button" class="desktop-folder-icon" id="open-desktop-skills" title="Double-click to open credentials.conf">
+        <span class="folder-icon-graphic">⚡<span class="dbl-indicator">∷</span></span>
+        <span class="folder-label">skills.conf</span>
+      </button>
+
+      <button type="button" class="desktop-folder-icon" id="open-desktop-music" title="Double-click to open music_player">
+        <span class="folder-icon-graphic">🎵<span class="dbl-indicator">∷</span></span>
+        <span class="folder-label">music.mp3</span>
+      </button>
+
+      <button type="button" class="desktop-folder-icon" id="open-desktop-contact" title="Double-click to open contacts.sh">
+        <span class="folder-icon-graphic">📡<span class="dbl-indicator">∷</span></span>
+        <span class="folder-label">contact.sh</span>
+      </button>
+
+      <button type="button" class="desktop-folder-icon" id="open-desktop-stats" title="Double-click to open system_stats">
+        <span class="folder-icon-graphic">⚙️<span class="dbl-indicator">∷</span></span>
+        <span class="folder-label">stats.sys</span>
       </button>
     </div>
 
@@ -90,364 +132,284 @@
     </div>
   </div>
 
-  <!-- Master Terminal Control Deck Mesh -->
-  <div id="deck-container">
+  <!-- FOCUSED CORE TERMINAL (PROFILE.DAT + ABOUT_ME.TXT ONLY) -->
+<div id="deck-container" class="minimized-to-desktop deck-focused-mode">
+  
+  <!-- Top Deck Header -->
+  <header class="deck-top-bar">
+    <div class="deck-title-group">
+      <span class="deck-status-dot"></span>
+      <span class="deck-title">https://zim-code1.github.io/azimamil-portfolio/viewer</span>
+    </div>
+    <div class="window-action-controls deck-master-controls">
+      <button type="button" class="control-btn red" data-action="deck-close" aria-label="Close deck" title="Close Deck to Wallpaper">
+        <span class="btn-icon">&times;</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Focused 2-Column Core Terminal -->
+  <div class="deck-grid-focused" id="deck-grid">
     
-    <!-- Top Deck Header -->
-    <header class="deck-top-bar">
-      <div class="deck-title-group">
-        <span class="deck-status-dot"></span>
-        <span class="deck-title">https://zim-code1.github.io/azimamil-portfolio/viewer</span>
+    <!-- 1. LEFT COLUMN: Profile Card -->
+    <section class="deck-card card-profile" id="card-profile">
+      <div class="card-header">
+        <div class="card-header-left">
+          <span class="card-tag">[ PROFILE.DAT ]</span>
+        </div>
+        <div class="card-header-right">
+          <button type="button" class="profile-active-toggle-btn" id="profile-active-btn" title="Toggle System Profile State">
+            <span class="status-dot-mini"></span> ACTIVE
+          </button>
+        </div>
       </div>
-      <div class="window-action-controls deck-master-controls">
-        <button type="button" class="control-btn red" data-action="deck-close" aria-label="Close deck" title="Close Deck to Wallpaper">
-          <span class="btn-icon">&times;</span>
+      <div class="card-content-wrap">
+        <div class="profile-card-body">
+          <div class="profile-avatar-frame crt-profile-frame" id="profile-frame-container">
+            <div class="crt-scanlines"></div>
+            <div class="crt-corner top-left"></div>
+            <div class="crt-corner top-right"></div>
+            <div class="crt-corner bottom-left"></div>
+            <div class="crt-corner bottom-right"></div>
+            
+            <!-- Profile Image -->
+            <img src="photo/portrait/azim_edited_1_crop.webp" alt="Azim Amil" id="profile-img">
+            
+            <!-- TV Static Overlay Layer -->
+            <div id="tv-static-layer" class="tv-static-layer hidden"></div>
+          </div>
+        </div>
+      </div>
+      <div class="card-empty-restore hidden">
+        <button type="button" class="restore-file-btn">
+          <span class="restore-file-icon">&#128193;</span>
+          <span class="restore-file-name">profile.dat</span>
+          <span class="restore-file-hint">[ click to restore ]</span>
         </button>
       </div>
-    </header>
+    </section>
 
-    <!-- 6-Panel Grid Matrix -->
-    <div class="deck-grid" id="deck-grid">
-      
-      <!-- 1. TOP-LEFT: Profile Card -->
-      <section class="deck-card card-profile" id="card-profile">
-        <div class="card-header">
-          <div class="card-header-left">
-            <span class="card-tag">[ PROFILE.DAT ]</span>
-          </div>
-          <div class="card-header-right">
-            <button type="button" class="profile-active-toggle-btn" id="profile-active-btn" title="Toggle System Profile State">
-              <span class="status-dot-mini"></span> ACTIVE
+    <!-- 2. RIGHT COLUMN: Main Console / Readme -->
+    <section class="deck-card card-console" id="about-me-card">
+      <div class="card-header card-header-console">
+        <div class="card-header-left">
+          <span class="card-tag">~/about_me.txt</span>
+        </div>
+        <div class="card-header-right">
+          <span class="terminal-page-indicator" id="about-page-indicator">PAGE 1/3</span>
+          <div class="window-action-controls" id="about-window-controls">
+            <button type="button" class="control-btn red" data-action="close" aria-label="Close panel" title="Close">
+              <span class="btn-icon">&times;</span>
             </button>
           </div>
         </div>
-        <div class="card-content-wrap">
-          <div class="profile-card-body">
-            <div class="profile-avatar-frame crt-profile-frame" id="profile-frame-container">
-              <div class="crt-scanlines"></div>
-              <div class="crt-corner top-left"></div>
-              <div class="crt-corner top-right"></div>
-              <div class="crt-corner bottom-left"></div>
-              <div class="crt-corner bottom-right"></div>
-              
-              <!-- Profile Image -->
-              <img src="photo/portrait/azim_edited_1_crop.webp" alt="Azim Amil" id="profile-img">
-              
-              <!-- TV Static Overlay Layer -->
-              <div id="tv-static-layer" class="tv-static-layer hidden"></div>
-            </div>
-          </div>
-        </div>
-        <div class="card-empty-restore hidden">
-          <button type="button" class="restore-file-btn">
-            <span class="restore-file-icon">&#128193;</span>
-            <span class="restore-file-name">profile.dat</span>
-            <span class="restore-file-hint">[ click to restore ]</span>
-          </button>
-        </div>
-      </section>
-
-      <!-- 2. TOP-CENTER: Main Console / Readme -->
-      <section class="deck-card card-console" id="about-me-card">
-        <div class="card-header card-header-console">
-          <div class="card-header-left">
-            <span class="card-tag">~/about_me.txt</span>
-          </div>
-          <div class="card-header-right">
-            <span class="terminal-page-indicator" id="about-page-indicator">PAGE 1/3</span>
-            <div class="window-action-controls" id="about-window-controls">
-              <button type="button" class="control-btn red" data-action="close" aria-label="Close panel" title="Close">
-                <span class="btn-icon">&times;</span>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div class="card-content-wrap console-live-content" id="about-live-content">
-          <div class="console-body" id="about-console-body">
-            <!-- JavaScript will dynamically render Page 1, Page 2, and Page 3 here -->
-          </div>
-          <div class="console-footer">
-            <span class="console-hint">[ Tab switches content ]</span>
-            <button id="terminal-next-btn" class="deck-btn-action" type="button">NEXT TAB &gt;</button>
-          </div>
-        </div>
-
-        <div class="card-empty-restore hidden" id="about-empty-state">
-          <button type="button" class="restore-file-btn" id="restore-about-btn">
-            <span class="restore-file-icon" aria-hidden="true">&#128193;</span>
-            <span class="restore-file-name">restore_session.sh</span>
-            <span class="restore-file-hint">[ click to reopen ]</span>
-          </button>
-        </div>
-      </section>
-
-      <!-- 3. TOP-RIGHT: Work, Gallery & Social Launchers -->
-      <section class="deck-card card-launchers" id="card-launchers">
-        <div class="card-header">
-          <div class="card-header-left">
-            <span class="card-tag">[ SOCIAL_LINKS ]</span>
-          </div>
-          <div class="card-header-right">
-            <div class="window-action-controls">
-
-              <button type="button" class="control-btn red" data-action="close" aria-label="Close panel" title="Close">
-                <span class="btn-icon">&times;</span>
-              </button>
-            </div>
-          </div>
-        </div>
-        <div class="card-content-wrap">
-          <div class="launchers-body" id="social-launchers-container"></div>
-        </div>
-        <div class="card-empty-restore hidden">
-          <button type="button" class="restore-file-btn">
-            <span class="restore-file-icon">&#128193;</span>
-            <span class="restore-file-name">launchers.sh</span>
-            <span class="restore-file-hint">[ click to restore ]</span>
-          </button>
-        </div>
-      </section>
-
-      <!-- 4. BOTTOM-LEFT: System Stats & Color Palette Engine -->
-      <section class="deck-card card-stats" id="card-stats">
-        <div class="card-header">
-          <div class="card-header-left">
-            <span class="card-tag">[ SYSTEM_STATS ]</span>
-            <i class="fa fa-microchip stats-icon"></i>
-          </div>
-          <div class="card-header-right">
-            <div class="window-action-controls">
-              <button type="button" class="control-btn red" data-action="close" aria-label="Close panel" title="Close">
-                <span class="btn-icon">&times;</span>
-              </button>
-            </div>
-          </div>
-        </div>
-        <div class="card-content-wrap">
-          <div class="stats-body">
-            <!-- Top Color Palette Controller -->
-            <div class="palette-block">
-              <span class="palette-lbl">// THEME PRESET</span>
-              <div class="palette-controls">
-                <span class="terminal-dot default" data-theme="default" title="Default Matrix Green"></span>
-                <span class="terminal-dot mono" data-theme="mono" title="Monochrome White"></span>
-                <button type="button" class="color-wheel-btn terminal-dot rainbow" data-theme="rainbow" title="Cycle Color Themes" aria-label="Cycle Color Themes"></button>
-              </div>
-            </div>
-
-            <!-- Typography Preset Controller -->
-            <div class="palette-block typography-block">
-              <span class="palette-lbl">// FONT MATRIX</span>
-              <div class="palette-controls font-switcher-controls">
-                <button type="button" class="font-switch-btn active" data-font="avant-garde" title="Avant-Garde (VT323)">A</button>
-                <button type="button" class="font-switch-btn" data-font="cyber" title="Computer Terminal (Share Tech Mono)">C</button>
-                <button type="button" class="font-switch-btn" data-font="formal" title="Formal (Times New Roman)">F</button>
-              </div>
-            </div>
-            
-            <div class="palette-block">
-              <span class="palette-lbl">// VISUAL OVERLAYS</span>
-              <div class="palette-controls">
-                <button type="button" class="retro-mode-btn" id="trigger-fx-burst">GLITCH BURST</button>
-              </div>
-            </div>
-
-            <!-- Bottom Telemetry Metrics Group -->
-            <div class="stats-group">
-              <div class="stat-line">
-                <span class="stat-lbl">VERSION</span>
-                <span class="stat-val" id="stat-version">--</span>
-              </div>
-              <div class="stat-line">
-                <span class="stat-lbl">PROJECTS</span>
-                <span class="stat-val" id="stat-systems">--</span>
-              </div>
-              <div class="stat-line">
-                <span class="stat-lbl">DESIGNS</span>
-                <span class="stat-val" id="stat-artifacts">--</span>
-              </div>
-              <div class="stat-line">
-                <span class="stat-lbl">STATUS</span>
-                <span class="stat-val highlight" id="stat-status">--</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="card-empty-restore hidden">
-          <button type="button" class="restore-file-btn">
-            <span class="restore-file-icon">&#128193;</span>
-            <span class="restore-file-name">stats.sys</span>
-            <span class="restore-file-hint">[ click to restore ]</span>
-          </button>
-        </div>
-      </section>
-
-      <!-- 5. BOTTOM-CENTER: Skills + New Card, partitioned side-by-side in one grid slot -->
-      <div class="deck-split-row" id="skills-split-row">
-
-        <section class="deck-card card-skills" id="card-skills">
-          <div class="card-header">
-            <div class="card-header-left">
-              <span class="card-tag">[ CREDENTIALS_AND_SKILLS.CONF ]</span>
-              <span class="card-subtag">&gt;_</span>
-            </div>
-            <div class="card-header-right">
-              <div class="window-action-controls">
-                <button type="button" class="control-btn red" data-action="close" aria-label="Close panel" title="Close">
-                  <span class="btn-icon">&times;</span>
-                </button>
-              </div>
-            </div>
-          </div>
-          <div class="card-content-wrap">
-            <div class="skills-body"></div>
-          </div>
-          <div class="card-empty-restore hidden">
-            <button type="button" class="restore-file-btn">
-              <span class="restore-file-icon">&#128193;</span>
-              <span class="restore-file-name">skills.conf</span>
-              <span class="restore-file-hint">[ click to restore ]</span>
-            </button>
-          </div>
-        </section>
-
-
-        <section class="deck-card card-new" id="card-new">
-          <div class="card-header">
-            <div class="card-header-left">
-              <span class="card-tag">[ music.mp3 ]</span>
-            </div>
-            <div class="card-header-right">
-              <div class="window-action-controls">
-                <button type="button" class="control-btn red" data-action="close" aria-label="Close panel" title="Close">
-                  <span class="btn-icon">&times;</span>
-                </button>
-              </div>
-            </div>
-          </div>
-          <div class="card-content-wrap">
-            <div class="terminal-spotify-body">
-              <div class="vinyl-disc-container">
-                <div class="vinyl-record" id="vinyl-record">
-                  <div class="vinyl-grooves"></div>
-                  <div class="vinyl-label">
-                    <span class="vinyl-center-dot"></span>
-                  </div>
-                </div>
-              </div>
-              <div class="spotify-meta">
-                <span class="track-title" id="track-title">Before The Fade — Azim-OS</span>
-                <span class="track-status" id="track-status">// PAUSED</span>
-              </div>
-              
-              <div class="spotify-progress-group">
-                <div class="terminal-progress-bar">
-                  <span id="progress-bar-fill">[░░░░░░░░░░]</span>
-                </div>
-                <div class="spotify-volume-row">
-                  <label class="volume-lbl" for="volume-slider">VOL:</label>
-                  <input type="range" id="volume-slider" min="0" max="1" step="0.05" value="0.5">
-                </div>
-              </div>
-
-              <div class="spotify-controls">
-                <button type="button" id="prev-track-btn" class="font-switch-btn">&lt;&lt;</button>
-                <button type="button" id="audio-toggle-btn" class="deck-btn-action">♫ PLAY</button>
-                <button type="button" id="next-track-btn" class="font-switch-btn">&gt;&gt;</button>
-                <button type="button" id="speed-toggle-btn" class="font-switch-btn" title="Toggle Vinyl Speed">1.0x</button>
-              </div>
-            </div>
-          </div>
-          <div class="card-empty-restore hidden">
-            <button type="button" class="restore-file-btn">
-              <span class="restore-file-icon">&#128193;</span>
-              <span class="restore-file-name">music.mp3</span>
-              <span class="restore-file-hint">[ click to restore ]</span>
-            </button>
-          </div>
-        </section>
       </div>
 
-      
-
-      <!-- 6. BOTTOM-RIGHT: Contact (Large Message Layout) -->
-      <section class="deck-card card-contact" id="card-contact">
-        <div class="card-header">
-          <div class="card-header-left">
-            <span class="card-tag">[ CONTACTS.SH ]</span>
-            <span class="status-indicator-ping"></span>
-          </div>
-          <div class="card-header-right">
-            <div class="window-action-controls">
-              <button type="button" class="control-btn red" data-action="close" aria-label="Close panel" title="Close">
-                <span class="btn-icon">&times;</span>
-              </button>
-            </div>
-          </div>
+      <div class="card-content-wrap console-live-content" id="about-live-content">
+        <div class="console-body" id="about-console-body">
+          <!-- JavaScript dynamic pages rendered here -->
         </div>
-        <div class="card-content-wrap">
-          <div class="contact-deck-body">
-            <form id="contact-form" class="contact-terminal-form" action="https://formspree.io/f/xdkpobvv" method="POST">
-              <div class="contact-meta-row">
-                <div class="form-row compact">
-                  <label for="form-name">Name</label>
-                  <input type="text" id="form-name" name="name" autocomplete="name" placeholder="Enter name..." required>
-                </div>
-                <div class="form-row compact">
-                  <label for="form-email">Email</label>
-                  <input type="email" id="form-email" name="email" autocomplete="email" placeholder="Enter email..." required>
-                </div>
-              </div>
-
-              <!-- Large, Prominent Message Field with 300-Character Limit -->
-              <div class="form-row large-msg-row">
-                <div class="msg-header-row">
-                  <label for="form-message">Transmission Message</label>
-                  <span id="char-counter">0 / 300</span>
-                </div>
-                <textarea id="form-message" name="message" rows="5" maxlength="300" placeholder="Type your message here (max 300 chars)..." required></textarea>
-              </div>
-
-              <!-- Appropriate Terminal Action Button -->
-              <button type="submit" class="deck-btn-action contact-transmit-btn">
-                <span class="btn-prefix">&gt;_</span> TRANSMIT MESSAGE
-              </button>
-              <p id="form-status" class="contact-form-status"></p>
-            </form>
-          </div>
+        <div class="console-footer">
+          <span class="console-hint">[ Tab switches content ]</span>
+          <button id="terminal-next-btn" class="deck-btn-action" type="button">NEXT TAB &gt;</button>
         </div>
-        <div class="card-empty-restore hidden">
-          <button type="button" class="restore-file-btn">
-            <span class="restore-file-icon">&#128193;</span>
-            <span class="restore-file-name">contacts.sh</span>
-            <span class="restore-file-hint">[ click to restore ]</span>
-          </button>
-        </div>
+      </div>
 
-        <!-- THEME TRANSMISSION SUCCESS ALERT MODAL -->
-        <div id="contact-alert-modal" class="deck-modal-overlay hidden">
-          <div class="deck-modal-window alert-window">
-            <div class="explorer-header-bar">
-              <span class="explorer-title">system_notification.sys</span>
-              <div class="explorer-controls">
-                <span class="control-dot red" id="close-contact-alert"></span>
-              </div>
-            </div>
-            <div class="alert-window-body">
-              <div class="alert-window-icon" aria-hidden="true">📡</div>
-              <h3>TRANSMISSION SUCCESSFUL</h3>
-              <p>
-                Your packet has been successfully routed and transmitted to Azim's terminal inbox.
-              </p>
-              <button type="button" id="dismiss-contact-alert" class="deck-btn-action">ACKNOWLEDGE &amp; CLOSE</button>
-            </div>
-          </div>
-        </div>
-      </section>
+      <div class="card-empty-restore hidden" id="about-empty-state">
+        <button type="button" class="restore-file-btn" id="restore-about-btn">
+          <span class="restore-file-icon" aria-hidden="true">&#128193;</span>
+          <span class="restore-file-name">restore_session.sh</span>
+          <span class="restore-file-hint">[ click to reopen ]</span>
+        </button>
+      </div>
+    </section>
 
+  </div>
+</div>
+
+
+<!-- ========================================================================== -->
+<!-- STANDALONE APP POPUP MODALS (EXTRACTED FROM OLD TERMINAL GRID)            -->
+<!-- ========================================================================== -->
+
+<!-- 1. STANDALONE MODAL: SOCIAL LINKS -->
+<div id="socials-modal" class="deck-modal-overlay hidden">
+  <div class="deck-modal-window app-window-sm">
+    <div class="explorer-header-bar">
+      <span class="explorer-title">social_links.sh - Launchers</span>
+      <div class="explorer-controls">
+        <span class="control-dot red" data-action="close" title="Close Window"></span>
+      </div>
+    </div>
+    <div class="card-content-wrap" style="padding: 12px;">
+      <div class="launchers-body" id="social-launchers-container"></div>
     </div>
   </div>
+</div>
+
+<!-- 2. STANDALONE MODAL: SYSTEM STATS & THEME CONTROLLER -->
+<div id="stats-modal" class="deck-modal-overlay hidden">
+  <div class="deck-modal-window app-window-sm">
+    <div class="explorer-header-bar">
+      <span class="explorer-title">system_stats.sys - Configuration Engine</span>
+      <div class="explorer-controls">
+        <span class="control-dot red" data-action="close" title="Close Window"></span>
+      </div>
+    </div>
+    <div class="card-content-wrap" style="padding: 12px;">
+      <div class="stats-body">
+        <!-- Color Palette Controller -->
+        <div class="palette-block">
+          <span class="palette-lbl">// THEME PRESET</span>
+          <div class="palette-controls">
+            <span class="terminal-dot default" data-theme="default" title="Default Matrix Green"></span>
+            <span class="terminal-dot mono" data-theme="mono" title="Monochrome White"></span>
+            <button type="button" class="color-wheel-btn terminal-dot rainbow" data-theme="rainbow" title="Cycle Color Themes" aria-label="Cycle Color Themes"></button>
+          </div>
+        </div>
+
+        <!-- Typography Controller -->
+        <div class="palette-block typography-block">
+          <span class="palette-lbl">// FONT MATRIX</span>
+          <div class="palette-controls font-switcher-controls">
+            <button type="button" class="font-switch-btn active" data-font="avant-garde" title="Avant-Garde (VT323)">A</button>
+            <button type="button" class="font-switch-btn" data-font="cyber" title="Computer Terminal (Share Tech Mono)">C</button>
+            <button type="button" class="font-switch-btn" data-font="formal" title="Formal (Times New Roman)">F</button>
+          </div>
+        </div>
+        
+        <!-- Visual Overlays Controller -->
+        <div class="palette-block">
+          <span class="palette-lbl">// VISUAL OVERLAYS</span>
+          <div class="palette-controls">
+            <button type="button" class="retro-mode-btn" id="trigger-fx-burst">GLITCH BURST</button>
+          </div>
+        </div>
+
+        <!-- Telemetry Metrics -->
+        <div class="stats-group">
+          <div class="stat-line">
+            <span class="stat-lbl">VERSION</span>
+            <span class="stat-val" id="stat-version">--</span>
+          </div>
+          <div class="stat-line">
+            <span class="stat-lbl">PROJECTS</span>
+            <span class="stat-val" id="stat-systems">--</span>
+          </div>
+          <div class="stat-line">
+            <span class="stat-lbl">DESIGNS</span>
+            <span class="stat-val" id="stat-artifacts">--</span>
+          </div>
+          <div class="stat-line">
+            <span class="stat-lbl">STATUS</span>
+            <span class="stat-val highlight" id="stat-status">--</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 3. STANDALONE MODAL: CREDENTIALS & SKILLS -->
+<div id="skills-modal" class="deck-modal-overlay hidden">
+  <div class="deck-modal-window app-window-sm">
+    <div class="explorer-header-bar">
+      <span class="explorer-title">credentials_and_skills.conf</span>
+      <div class="explorer-controls">
+        <span class="control-dot red" data-action="close" title="Close Window"></span>
+      </div>
+    </div>
+    <div class="card-content-wrap" style="padding: 12px;">
+      <div class="skills-body"></div>
+    </div>
+  </div>
+</div>
+
+<!-- 4. STANDALONE MODAL: MUSIC PLAYER -->
+<div id="music-modal" class="deck-modal-overlay hidden">
+  <div class="deck-modal-window app-window-sm">
+    <div class="explorer-header-bar">
+      <span class="explorer-title">music.mp3 - Terminal Audio Deck</span>
+      <div class="explorer-controls">
+        <span class="control-dot red" data-action="close" title="Close Window"></span>
+      </div>
+    </div>
+    <div class="card-content-wrap" style="padding: 12px;">
+      <div class="terminal-spotify-body">
+        <div class="vinyl-disc-container">
+          <div class="vinyl-record" id="vinyl-record">
+            <div class="vinyl-grooves"></div>
+            <div class="vinyl-label">
+              <span class="vinyl-center-dot"></span>
+            </div>
+          </div>
+        </div>
+        <div class="spotify-meta">
+          <span class="track-title" id="track-title">Before The Fade — Azim-OS</span>
+          <span class="track-status" id="track-status">// PAUSED</span>
+        </div>
+        
+        <div class="spotify-progress-group">
+          <div class="terminal-progress-bar">
+            <span id="progress-bar-fill">[░░░░░░░░░░]</span>
+          </div>
+          <div class="spotify-volume-row">
+            <label class="volume-lbl" for="volume-slider">VOL:</label>
+            <input type="range" id="volume-slider" min="0" max="1" step="0.05" value="0.5">
+          </div>
+        </div>
+
+        <div class="spotify-controls">
+          <button type="button" id="prev-track-btn" class="font-switch-btn">&lt;&lt;</button>
+          <button type="button" id="audio-toggle-btn" class="deck-btn-action">♫ PLAY</button>
+          <button type="button" id="next-track-btn" class="font-switch-btn">&gt;&gt;</button>
+          <button type="button" id="speed-toggle-btn" class="font-switch-btn" title="Toggle Vinyl Speed">1.0x</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 5. STANDALONE MODAL: CONTACT TERMINAL FORM -->
+<div id="contact-modal" class="deck-modal-overlay hidden">
+  <div class="deck-modal-window app-window-sm">
+    <div class="explorer-header-bar">
+      <span class="explorer-title">contacts.sh - Transmission Terminal</span>
+      <div class="explorer-controls">
+        <span class="control-dot red" data-action="close" title="Close Window"></span>
+      </div>
+    </div>
+    <div class="card-content-wrap" style="padding: 12px;">
+      <div class="contact-deck-body">
+        <form id="contact-form" class="contact-terminal-form" action="https://formspree.io/f/xdkpobvv" method="POST">
+          <div class="contact-meta-row">
+            <div class="form-row compact">
+              <label for="form-name">Name</label>
+              <input type="text" id="form-name" name="name" autocomplete="name" placeholder="Enter name..." required>
+            </div>
+            <div class="form-row compact">
+              <label for="form-email">Email</label>
+              <input type="email" id="form-email" name="email" autocomplete="email" placeholder="Enter email..." required>
+            </div>
+          </div>
+
+          <div class="form-row large-msg-row">
+            <div class="msg-header-row">
+              <label for="form-message">Transmission Message</label>
+              <span id="char-counter">0 / 300</span>
+            </div>
+            <textarea id="form-message" name="message" rows="5" maxlength="300" placeholder="Type your message here (max 300 chars)..." required></textarea>
+          </div>
+
+          <button type="submit" class="deck-btn-action contact-transmit-btn">
+            <span class="btn-prefix">&gt;_</span> TRANSMIT MESSAGE
+          </button>
+          <p id="form-status" class="contact-form-status"></p>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 
   <!-- OVERLAY MODAL: PROJECTS WORKSPACE -->
   <div id="projects-modal" class="deck-modal-overlay hidden">
@@ -465,10 +427,10 @@
           <div class="file-tree">
             <details open class="tree-dir">
               <summary>📁 projects</summary>
-              <details open class="tree-dir" data-project="coco-sorter">
-                <summary>📁 coco-sorter</summary>
-                <div class="tree-file active" data-file="readme" data-project="coco-sorter">📄 README.md</div>
-                <div class="tree-file" data-file="preview" data-project="coco-sorter">🖼️ preview.png</div>
+              <details open class="tree-dir" data-project="CoCo-sorter">
+                <summary>📁 CoCo-sorter</summary>
+                <div class="tree-file active" data-file="readme" data-project="CoCo-sorter">📄 README.md</div>
+                <div class="tree-file" data-file="preview" data-project="CoCo-sorter">🖼️ preview.png</div>
               </details>
               <details class="tree-dir" data-project="kamada">
                 <summary>📁 kamada-printing</summary>
@@ -502,11 +464,11 @@
             </div>
 
             <!-- CocoSorter Content -->
-            <div class="project-view active" id="view-coco-sorter-readme">
-              <div class="code-editor-header">README.md — coco-sorter</div>
+            <div class="project-view active" id="view-CoCo-sorter-readme">
+              <div class="code-editor-header">README.md — CoCo-sorter</div>
               <div class="code-editor-body markdown-body">
-                <h3># CocoSorter</h3>
-                <p>CocoSorter is an automated sorting system using a Raspberry Pi and Arduino. It classifies coconuts by analyzing color for ripeness with a camera and internal water content via audio from a microphone.</p>
+                <h3># CoCoSorter</h3>
+                <p>CoCoSorter is an automated sorting system using a Raspberry Pi and Arduino. It classifies coconuts by analyzing color for ripeness with a camera and internal water content via audio from a microphone.</p>
                 <div class="code-meta-section">
                   <span class="meta-label">// Tech Stack</span>
                   <div class="tech-tags">
@@ -514,7 +476,7 @@
                   </div>
                 </div>
                 <div class="code-links-section">
-                  <a href="https://github.com/zim-code1/coco-sorter-code" class="code-btn" target="_blank">View Code</a>
+                  <a href="https://github.com/zim-code1/CoCo-sorter-code" class="code-btn" target="_blank">View Code</a>
                   <button class="code-btn video-button" id="coco-video-btn" type="button">Video Demo</button>
                 </div>
                 <div class="video-container" id="coco-video-embed" style="display: none;">
